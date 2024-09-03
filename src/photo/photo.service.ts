@@ -1,11 +1,12 @@
-import { Injectable, Inject } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 import { Repository } from 'typeorm';
 import { Photo } from './photo.entity';
+import { InjectRepository } from '@nestjs/typeorm';
 
 @Injectable()
 export class PhotoService {
   constructor(
-    @Inject('PHOTO_REPOSITORY')
+    @InjectRepository(Photo)
     private photoRepository: Repository<Photo>,
   ) {}
 
