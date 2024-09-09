@@ -1,4 +1,3 @@
-version: '3.8'
 services:
   dev-db:
     image: mysql
@@ -7,7 +6,7 @@ services:
     environment:
       MYSQL_USER: mysql
       MYSQL_PASSWORD: 1234
-      MYSQL_DB: nest
+      MYSQL_DB: jiphyeonjeon
       MYSQL_ROOT_PASSWORD: 1234
     networks:
       - my_network
