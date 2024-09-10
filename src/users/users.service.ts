@@ -23,7 +23,7 @@ export class UsersService {
     return items;
   }
 
-  async search(searchUserDto: SearchUserDto): Promise<User> {
+  async search(searchUserDto: SearchUserDto): Promise<User[]> {
     const { id, nicknameOrEmail, page, limit } = searchUserDto;
     let items;
     log(
@@ -37,18 +37,20 @@ export class UsersService {
         // });
         items = await this.userRepository
           .createQueryBuilder('user')
+          .skip(page * limit)
+          .take(limit)
           .leftJoinAndSelect(
             'user.lendings',
             'lending',
             'lending.userId = user.id',
           )
           .getMany();
-        log(`items: ${typeof(items)}`);
-        items.map((user) => {
-
-        });
-        const overDueDay = items.reduce((acc, cur) => acc + cur.overDueDay, 0);
-        return { ...items, overDueDay };
+          return items.map((user) => {
+            const lending = user.lendings;
+            const overDueDay = lending.reduce((acc, cur) => acc + cur.overDueDay, 0);
+            // log(`overDueDay: ${overDueDay}`);
+            return { ...user, overDueDay };
+          });
       }
     } catch (error: any) {
       throw new InternalServerErrorException(error.message);

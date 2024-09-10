@@ -9,6 +9,7 @@ import {
   HttpException,
   InternalServerErrorException,
   Query,
+  Options,
 } from '@nestjs/common';
 import { UsersService } from './users.service';
 import {
@@ -73,8 +74,7 @@ export class UsersController {
   @Get()
   async search(@Query() searchUserDto: SearchUserDto) {
     const result = await this.usersService.search(searchUserDto);
-
-    // log(`result: ${JSON.stringify(result)}`);
+    log(`result: ${result.length}`);
     const userListSchema = z.array(UserSchema);
     const safeResult = userListSchema.safeParse(result);
 
